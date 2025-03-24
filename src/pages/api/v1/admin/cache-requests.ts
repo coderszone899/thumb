@@ -4,17 +4,17 @@ import { getAdminKvData } from "@services/kv-data";
 import { return200 } from "@services/return-types";
 import qs from "qs";
 
-export const GET = async (context) => {
-  const data = await getAdminKvData(context);
+export let GET = async (context) => {
+  let data = await getAdminKvData(context);
 
   return return200(data);
 };
 
-export const DELETE = async (context) => {
-  const queryParams = qs.parse(context.request.url.split("?")[1]);
+export let DELETE = async (context) => {
+  let queryParams = qs.parse(context.request.url.split("?")[1]);
 
-  const id = queryParams.id;
-  const url = queryParams.url;
+  let id = queryParams.id;
+  let url = queryParams.url;
 
   //delete d1 records
   await deleteD1ByTableAndId(
