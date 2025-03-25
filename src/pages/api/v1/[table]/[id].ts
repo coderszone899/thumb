@@ -31,11 +31,11 @@ import {
 import { checkToken } from "@services/token";
 
 //get single record
-export const GET = async (context) => {
-  // const start = Date.now();
+export var GET = async (context) => {
+  // var start = Date.now();
   let params = context.params;
 
-  const tableName = params.table;
+  var tableName = params.table;
   let entry;
   try {
     entry = apiConfig.filter((tbl) => tbl.route === tableName)[0];
@@ -50,7 +50,7 @@ export const GET = async (context) => {
 
   // let { includeContentType, source, ...params } =  context.request.query();
 
-  const id = params.id;
+  var id = params.id;
 
   if (entry.hooks?.beforeOperation) {
     await entry.hooks.beforeOperation(context, "read", id);
@@ -58,7 +58,7 @@ export const GET = async (context) => {
 
   // params.id = id;
   // will check the item result when we get the data
-  const accessControlResult = await getApiAccessControlResult(
+  var accessControlResult = await getApiAccessControlResult(
     entry?.access?.operation?.read ?? false,
     entry?.access?.filter?.read  ?? false,
     true,
@@ -79,7 +79,7 @@ export const GET = async (context) => {
   // if (includeContentType !== undefined) {
   //   source = 'd1';
   // }
-  const source = "D1";
+  var source = "D1";
 
   let data = await getRecords(
     context,
@@ -91,7 +91,7 @@ export const GET = async (context) => {
   );
 
   // if (entry.access?.item?.read) {
-  //   const accessControlResult = await getItemReadResult(
+  //   var accessControlResult = await getItemReadResult(
   //     entry.access.item.read,
   //     context,
   //     data
@@ -109,18 +109,18 @@ export const GET = async (context) => {
   //   await entry.hooks.afterOperation(context, 'read', id, null, data);
   // }
 
-  // const end = Date.now();
-  // const executionTime = end - start;
+  // var end = Date.now();
+  // var executionTime = end - start;
 
   return return200(data);
 };
 
-export const PUT: APIRoute = async (context) => {
-  const { env } = context.locals.runtime;
+export var PUT: APIRoute = async (context) => {
+  var { env } = context.locals.runtime;
 
   var params = context.params;
 
-  const route = params.table;
+  var route = params.table;
   let entry;
   try {
     entry = apiConfig.filter((tbl) => tbl.route === route)[0];
@@ -133,7 +133,7 @@ export const PUT: APIRoute = async (context) => {
     );
   }
 
-  const payload = await context.request.json();
+  var payload = await context.request.json();
 
   var content: { data?: any; table?: string; id?: string } = {};
   content = payload;
@@ -144,7 +144,7 @@ export const PUT: APIRoute = async (context) => {
     await entry.hooks?.beforeOperation(context, "update", params.id, content);
   }
 
-  const accessControlResult = await getApiAccessControlResult(
+  var accessControlResult = await getApiAccessControlResult(
     entry?.access?.operation?.update ?? false,
     entry?.access?.filter?.update ?? false,
     entry?.access?.item?.update ?? false,
@@ -162,8 +162,8 @@ export const PUT: APIRoute = async (context) => {
     return return401();
   }
 
-  // const route = context.request.path.split('/')[2];
-  // const table = apiConfig.find((entry) => entry.route === route).table;
+  // var route = context.request.path.split('/')[2];
+  // var table = apiConfig.find((entry) => entry.route === route).table;
 
   content.table = entry.table;
   content.id = params.id;
@@ -183,7 +183,7 @@ export const PUT: APIRoute = async (context) => {
       // );
     }
     delete params.table;
-    const result = await updateRecord(
+    var result = await updateRecord(
       context.locals.runtime.env.D1,
       {},
       content,
@@ -207,12 +207,12 @@ export const PUT: APIRoute = async (context) => {
   return return200();
 };
 
-export const DELETE: APIRoute = async (context) => {
-  const params = context.params;
+export var DELETE: APIRoute = async (context) => {
+  var params = context.params;
 
-  const id = params.id;
+  var id = params.id;
 
-  const tableName = params.table;
+  var tableName = params.table;
 
   let entry;
   try {
@@ -232,7 +232,7 @@ export const DELETE: APIRoute = async (context) => {
     await entry.hooks.beforeOperation(context, "delete", id);
   }
 
-  const accessControlResult = await getApiAccessControlResult(
+  var accessControlResult = await getApiAccessControlResult(
     entry?.access?.operation?.delete ?? true,
     entry?.access?.filter?.delete ?? true,
     entry?.access?.item?.delete ?? true,
@@ -250,7 +250,7 @@ export const DELETE: APIRoute = async (context) => {
   }
   // params.id = id;
 
-  // const record = await getRecords(
+  // var record = await getRecords(
   //   context,
   //   table,
   //   params,
@@ -270,7 +270,7 @@ export const DELETE: APIRoute = async (context) => {
 
   if (record) {
     console.log("content found, deleting...");
-    const result = await deleteRecord(context.locals.runtime.env.D1, {
+    var result = await deleteRecord(context.locals.runtime.env.D1, {
       id,
       table: tableName,
     });
