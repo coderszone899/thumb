@@ -1,8 +1,8 @@
 import { validateSessionToken } from "./sessions";
 
-export let checkToken = async (context: any) => {
+export const checkToken = async (context: any) => {
   // get header for token and lookup user and attached to context
-  let token = context.request.headers
+  const token = context.request.headers
     .get("Authorization").toLowerCase()
     ?.replace("bearer ", "");
   if (!token) {
@@ -10,7 +10,7 @@ export let checkToken = async (context: any) => {
   }
 
   try {
-    let userSession = await validateSessionToken(
+    const userSession = await validateSessionToken(
       context.locals.runtime.env.D1,
       token
     );
