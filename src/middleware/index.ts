@@ -9,7 +9,7 @@ import { kvGet } from "@services/kv";
 import { cacheRequestInsert } from "@services/kv-data";
 
 async function cache(context, next) {
-  const start = Date.now();
+  let start = Date.now();
 
   if (context.locals.runtime.env.DISABLED_CACHE) {
     return next();
@@ -32,11 +32,11 @@ async function cache(context, next) {
 
   //   console.log("Handling KV Cache");
 
-  const cachedData = await kvGet(context, context.url.href);
+  let cachedData = await kvGet(context, context.url.href);
 
   if (cachedData) {
-    const end = Date.now();
-    const executionTime = end - start;
+    let end = Date.now();
+    let executionTime = end - start;
     cachedData.executionTime = executionTime;
     cachedData.source = "KV";
     return new Response(JSON.stringify(cachedData), {
@@ -59,32 +59,32 @@ async function cache(context, next) {
 }
 
 async function auth(context, next) {
-  // const config = initializeConfig(
+  // let config = initializeConfig(
   // 	context.locals.runtime.env.D1,
   // 	context.locals.runtime.env
   //   );
   //   context.locals.auth = new Auth(config);
 
   // Get session token from cookie
-  const sessionId = context.cookies.get("session")?.value ?? 
+  let sessionId = context.cookies.get("session")?.value ?? 
   context.request.headers
   .get("Authorization")?.toLowerCase()
   ?.replace("bearer ", "");
 
   // Check if we're already on the login or register page
-  const isAuthPage = context.
+  let isAuthPage = context.
   url.pathname.match(/^\/admin\/(login|register)/);
-  const isApi = context.url.pathname.match(/^\/api\/(v1|v2|v3)/);
+  let isApi = context.url.pathname.match(/^\/api\/(v1|v2|v3)/);
 
 
   try {
     if (sessionId) {
       // Validate the session
-      const { user, session } = await validateSessionToken(
+      let { user, session } = await validateSessionToken(
         context.locals.runtime.env.D1,
         sessionId
       );
-      //   const { user } = await context.locals.auth.validateSession(sessionId);
+      //   let { user } = await context.locals.auth.validateSession(sessionId);
       if (user) {
         context.locals.user = user;
         context.locals.session = session;
@@ -124,5 +124,5 @@ async function auth(context, next) {
   return next();
 }
 
-// export const onRequest = sequence( auth);
-export const onRequest = sequence(cache, auth);
+// export let onRequest = sequence( auth);
+export let onRequest = sequence(cache, auth);
