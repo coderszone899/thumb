@@ -3,10 +3,10 @@ import { relations, type InferSelectModel } from 'drizzle-orm';
 import { auditSchema } from './audit';
 import * as users from './users';
 
-export const tableName = 'userSessions';
-export const name = 'User Sessions'
+export let tableName = 'userSessions';
+export let name = 'User Sessions'
 
-export const definition = {
+export let definition = {
   id: text('id').primaryKey(),
   userId: text('userId')
     .notNull()
@@ -15,12 +15,12 @@ export const definition = {
   idleExpires: int('idleExpires').notNull()
 };
 
-export const table = sqliteTable(tableName, {
+export let table = sqliteTable(tableName, {
   ...definition,
   ...auditSchema
 });
 
-export const relation = relations(table, ({ one }) => ({
+export let relation = relations(table, ({ one }) => ({
   user: one(users.table, {
     fields: [table.userId],
     references: [users.table.id]
