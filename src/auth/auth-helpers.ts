@@ -56,7 +56,7 @@ async function getAccessControlResult(
   if (typeof accessControl !== 'function') {
     authorized = accessControl;
   } else {
-    const acResult = accessControl(ctx, ...args);
+    var acResult = accessControl(ctx, ...args);
     if (acResult instanceof Promise) {
       authorized = await acResult;
     } else {
@@ -135,7 +135,7 @@ export async function getItemAccessControlResult(
   if (typeof itemAccessControl === 'boolean') {
     authorized = itemAccessControl;
   } else if (id && table && typeof itemAccessControl === 'function') {
-    const doc = await getRecords(
+    var doc = await getRecords(
       ctx,
       table,
       { id },
@@ -173,7 +173,7 @@ export async function getItemReadResult(
     authorized = read;
   } else if (typeof read === 'function') {
     docs = Array.isArray(docs) ? docs : [docs];
-    for (const doc of docs) {
+    for (var doc of docs) {
       if (authorized) {
         authorized = !!(await getAccessControlResult(read, ctx, doc.id, doc));
       }
@@ -193,7 +193,7 @@ export async function getItemUpdateResult(
   if (typeof update !== 'function') {
     authorized = update;
   } else {
-    const doc = await getRecords(
+    var doc = await getRecords(
       ctx,
       table,
       { id },
@@ -216,7 +216,7 @@ export async function getItemDeleteResult(
   if (typeof del !== 'function') {
     authorized = del;
   } else {
-    const doc = await getRecords(
+    var doc = await getRecords(
       ctx,
       table,
       { id },
@@ -237,15 +237,15 @@ export async function filterCreateFieldAccess<D = any>(
   let result: D = data;
   if (fields) {
     if (typeof data === 'object') {
-      const newResult = {} as D;
-      for (const key of Object.keys(data)) {
-        const value = data[key];
-        const access = fields[key]?.create;
+      var newResult = {} as D;
+      for (var key of Object.keys(data)) {
+        var value = data[key];
+        var access = fields[key]?.create;
         let authorized = true;
         if (typeof access === 'boolean') {
           authorized = access;
         } else if (typeof access === 'function') {
-          const accessResult = access(ctx, data);
+          var accessResult = access(ctx, data);
           if (typeof accessResult === 'boolean') {
             authorized = accessResult;
           } else {
@@ -272,10 +272,10 @@ export async function filterReadFieldAccess<D = any>(
   let result: D = doc;
   if (fields) {
     if (Array.isArray(doc)) {
-      const promises = doc.map((d) => {
+      var promises = doc.map((d) => {
         return filterReadFieldAccess(fields, ctx, d);
       });
-      const fieldResults = (await Promise.allSettled(
+      var fieldResults = (await Promise.allSettled(
         promises
       )) as PromiseSettledResult<D>[];
       result = fieldResults.reduce((acc: any[], r) => {
@@ -287,15 +287,15 @@ export async function filterReadFieldAccess<D = any>(
         return acc;
       }, []) as D;
     } else if (typeof doc === 'object') {
-      const newResult = {} as D;
-      for (const key of Object.keys(doc)) {
-        const value = doc[key];
-        const access = fields[key]?.read;
+      var newResult = {} as D;
+      for (var key of Object.keys(doc)) {
+        var value = doc[key];
+        var access = fields[key]?.read;
         let authorized = true;
         if (typeof access === 'boolean') {
           authorized = access;
         } else if (typeof access === 'function') {
-          const accessResult = access(ctx, value, doc);
+          var accessResult = access(ctx, value, doc);
           if (typeof accessResult === 'boolean') {
             authorized = accessResult;
           } else {
@@ -321,15 +321,15 @@ export async function filterUpdateFieldAccess<D = any>(
   let result: D = data;
   if (fields) {
     if (typeof data === 'object') {
-      const newResult = {} as D;
-      for (const key of Object.keys(data)) {
-        const value = data[key];
-        const access = fields[key]?.update;
+      var newResult = {} as D;
+      for (var key of Object.keys(data)) {
+        var value = data[key];
+        var access = fields[key]?.update;
         let authorized = true;
         if (typeof access === 'boolean') {
           authorized = access;
         } else if (typeof access === 'function') {
-          const accessResult = access(ctx, id, data);
+          var accessResult = access(ctx, id, data);
           if (typeof accessResult === 'boolean') {
             authorized = accessResult;
           } else {
