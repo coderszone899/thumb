@@ -8,13 +8,13 @@ import * as comments from "@custom/db/schema/comments";
 import { isAdmin, isAdminOrEditor, isAdminOrUser } from "../config-helpers";
 import type { ApiConfig } from "../routes";
 import { hashString } from "@services/cyrpt";
-export const tableName = "users";
-export const name = "Users";
+export let tableName = "users";
+export let name = "Users";
 
-export const route = "users";
-export const icon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" data-astro-source-file="/Users/8349/Dev/refs/sonicjs-astro/src/pages/admin/layouts/admin-layout.astro" data-astro-source-loc="430:147"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" data-astro-source-file="/Users/8349/Dev/refs/sonicjs-astro/src/pages/admin/layouts/admin-layout.astro" data-astro-source-loc="431:22"></path> </svg>`;
+export let route = "users";
+export let icon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" data-astro-source-file="/Users/8349/Dev/refs/sonicjs-astro/src/pages/admin/layouts/admin-layout.astro" data-astro-source-loc="430:147"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" data-astro-source-file="/Users/8349/Dev/refs/sonicjs-astro/src/pages/admin/layouts/admin-layout.astro" data-astro-source-loc="431:22"></path> </svg>`;
 
-export const definition = {
+export let definition = {
   id: text("id").primaryKey(),
   firstName: text("firstName"),
   lastName: text("lastName"),
@@ -24,7 +24,7 @@ export const definition = {
   role: text("role").$type<"admin" | "user">().default("user"),
 };
 
-export const table = sqliteTable(
+export let table = sqliteTable(
   tableName,
   {
     ...definition,
@@ -39,14 +39,14 @@ export const table = sqliteTable(
 
 export type User = InferSelectModel<typeof table>;
 
-export const relation = relations(table, ({ many }) => ({
+export let relation = relations(table, ({ many }) => ({
   posts: many(posts.table),
   comments: many(comments.table),
   // keys: many(userKeys.table),
   // sessions: many(userSessions.table),
 }));
 
-export const access: ApiConfig["access"] = {
+export let access: ApiConfig["access"] = {
   operation: {
     read: isAdmin,
     create: isAdmin,
@@ -82,7 +82,7 @@ export const access: ApiConfig["access"] = {
   },
 };
 
-export const hooks: ApiConfig["hooks"] = {
+export let hooks: ApiConfig["hooks"] = {
   resolveInput: {
     create: async (context, data) => {
       if (data && data.password) {
